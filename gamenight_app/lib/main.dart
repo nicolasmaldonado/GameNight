@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 void main() => runApp(const MyApp());
 
@@ -29,6 +32,26 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late Map data;
+  late List usersData;
+
+  Future getUsers() async {
+    String url = "localhost:4000";
+    http.Response response = await http.get(Uri.http(url, '/api/user/getAll'));
+    debugPrint(response.body);
+    data = json.decode(response.body);
+    setState(() {
+      usersData = data['users'];
+    });
+    // debugPrint(usersData.toString());
+    debugPrint(usersData.length.toString());
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getUsers();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +111,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 child: ElevatedButton(
                   child: const Text('Login'),
                   onPressed: () {
+                    getUsers();
                     print(nameController.text);
                     print(passwordController.text);
                   },
