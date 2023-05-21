@@ -36,7 +36,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   late List usersData;
 
   Future getUsers() async {
-    String url = "localhost:4000";
+    String url = "";
     http.Response response = await http.get(Uri.http(url, '/api/user/getAll'));
     debugPrint(response.body);
     data = json.decode(response.body);
